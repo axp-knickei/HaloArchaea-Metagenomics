@@ -29,6 +29,8 @@ The workflow is built on **Snakemake v8** using the **SLURM Executor Plugin** an
 * **Storage:** High-performance parallel file system (Lustre/GPFS) recommended for scratch space.
 
 ### Software Setup
+The project uses `pyproject.toml` to manage core Python dependencies and individual `workflow/envs/*.yaml` files for tool-specific Conda environments.
+
 1.  **Create the Master Environment** (Mamba recommended):
     ```bash
     mamba create -n snakemake_8 -c conda-forge -c bioconda \
@@ -38,6 +40,16 @@ The workflow is built on **Snakemake v8** using the **SLURM Executor Plugin** an
         pandas
     conda activate snakemake_8
     ```
+    This environment provides the Snakemake orchestrator and general Python tools.
+
+2.  **Install Project Core Dependencies**:
+    The main CLI and helper scripts use dependencies defined in `pyproject.toml`.
+    ```bash
+    pip install .
+    ```
+
+3.  **Conda Environment Version Pinning**:
+    All tool-specific Conda environments within `workflow/envs/` have their dependencies pinned to specific versions to ensure reproducibility. These environments will be automatically created/managed by Snakemake.
     **
 
 2.  **Database Preparation**:
@@ -49,15 +61,22 @@ The workflow is built on **Snakemake v8** using the **SLURM Executor Plugin** an
 ## 4. Configuration
 
 ### 1. Edit `config/config.yaml`
-Define your project name and the absolute paths to your downloaded databases.
+Define your project name, absolute paths to your downloaded databases, and key tool parameters.
+This file now controls:
+*   **Assembler selection:** Choose between `metaspades` and `megahit`.
+*   **SemiBin2 environment:** Specify the binning model environment (e.g., `global`, `human_gut`).
+*   **GTDB-Tk settings:** Configure ANI screening options (`use_skani`).
 ```yaml
 databases:
   gtdb: "/path/to/gtdb_r220"
   checkm2: "/path/to/checkm2_db/uniref100.KO.1.dmnd"
   dram: "/path/to/DRAM_data"
-````
-
-\*\*
+assembler: "metaspades" # Options: metaspades, megahit
+semibin2:
+  environment: "global" # e.g., global, human_gut
+gtdbtk:
+  use_skani: True
+```
 
 ### 2\. Edit `config/samples.tsv`
 
@@ -69,34 +88,39 @@ SaltPond_A	raw_data/A_R1.fastq.gz	raw_data/A_R2.fastq.gz
 ```
 
 ### 3\. Edit `config/resources.yaml`
-
-Match the partition names to your HPC's SLURM configuration.
-
+This file is now loaded by the Snakemake workflow to manage computational resources (CPU, RAM, runtime, SLURM partitions). Match the partition names to your HPC's SLURM configuration.
 ```yaml
 metaspades:
   slurm_partition: "bigmem" # Change to your cluster's high-memory partition
   mem_mb: 500000
 ```
 
-\*\*
+## 5. Usage
 
-## 5\. Usage
+Execute the pipeline using the provided `main.py` command-line interface (CLI). Ensure you have activated your master Snakemake environment and installed the project's core dependencies (`pip install .`). Apptainer/Singularity must be installed if you intend to use containers.
 
-Execute the pipeline using Snakemake's SLURM executor. Ensure you are on a submission node and that Apptainer/Singularity is installed.
-
+**Example: Local Execution**
 ```bash
-snakemake --executor slurm \
-          --use-conda \
-          --use-singularity \
-          --singularity-args "--nv" \
-          --jobs 50 \
-          --latency-wait 60
+python main.py --mode local --cores 8
+```
+This will run the workflow locally using 8 cores.
+
+**Example: SLURM Execution**
+```bash
+python main.py --mode slurm --jobs 50 --config config/config.yaml
+```
+This will submit jobs to a SLURM cluster, allowing up to 50 concurrent jobs.
+
+**Available `main.py` CLI options:**
+```bash
+python main.py --help
 ```
 
-  * `--executor slurm`: Uses the native SLURM plugin for job submission.
-  * `--singularity-args "--nv"`: Critical for passing GPU access to the **SemiBin2** container.
+**Notes on SLURM and GPU:**
+*   The `--singularity-args "--nv"` is automatically added in SLURM mode by the `main.py` CLI. This is critical for passing GPU access to tools like **SemiBin2** if they are run via a container.
+*   The `config/resources.yaml` file defines default and rule-specific resources for SLURM job submission.
 
-## 6\. Output Structure
+## 6. Output Structure
 
   * `results/assembly/`: Contigs and assembly graphs.
   * `results/binning/final_bins/`: Refined Metagenome-Assembled Genomes (MAGs).

@@ -1,6 +1,7 @@
 # workflow/Snakefile
 
 configfile: "config/config.yaml"
+configfile: "config/resources.yaml"
 
 import pandas as pd
 

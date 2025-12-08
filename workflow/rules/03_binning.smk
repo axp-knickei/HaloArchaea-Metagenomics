@@ -11,7 +11,7 @@ rule map_reads:
         "../envs/binning.yaml"
     shell:
         """
-        bowtie2 -x results/assembly/{sample}/contigs.fasta \
+        bowtie2 -x {input.contigs} \
             -1 {input.r1} -2 {input.r2} \
             -p {threads} | \
         samtools view -bS - | \
@@ -30,16 +30,24 @@ rule semibin2_binning:
         gpu = 1,
         mem_mb = 32000
     conda:
-        "../envs/binning.yaml" 
+        "../envs/binning.yaml"
+    params:
+        environment = config["semibin2"]["environment"],
+        tmp_out = "results/binning/semibin_output/{sample}"
     shell:
         """
         SemiBin2 single_easy_bin \
             -i {input.contigs} \
             -b {input.bam} \
-            -o results/binning/semibin_output/{sample} \
-            --environment human_gut \
+            -o {params.tmp_out} \
+            --environment {params.environment} \
             --threads {threads}
         
         mkdir -p {output.bins_dir}
-        cp results/binning/semibin_output/{sample}/output_bins/*.fa {output.bins_dir}/
+        # Check if bins were generated before copying
+        if [ -d "{params.tmp_out}/output_bins" ]; then
+            cp {params.tmp_out}/output_bins/*.fa {output.bins_dir}/
+        else
+            echo "Warning: No bins generated for {wildcards.sample}" >&2
+        fi
         """

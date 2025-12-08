@@ -10,7 +10,9 @@ rule gtdbtk_classify:
         "docker://ecogenomic/gtdbtk:2.5.0"
     params:
         outdir = "results/taxonomy/gtdbtk/{sample}",
-        db = config["databases"]["gtdb"]
+        db = config["databases"]["gtdb"],
+        # Logic for ANI screen based on config
+        ani_arg = "--ani_screen_method skani" if config["gtdbtk"].get("use_skani", False) else "--skip_ani_screen"
     shell:
         """
         export GTDBTK_DATA_PATH={params.db}
@@ -19,5 +21,5 @@ rule gtdbtk_classify:
             --out_dir {params.outdir} \
             --extension fa \
             --cpus {threads} \
-            --skip_ani_screen 
+            {params.ani_arg}
         """
