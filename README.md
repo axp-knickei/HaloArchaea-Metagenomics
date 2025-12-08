@@ -39,6 +39,8 @@ The workflow is built on **Snakemake v8** using the **SLURM Executor Plugin** an
 | **Quality** | [**CheckM2**](https://github.com/chklovski/CheckM2) | Machine learning-based completeness/contamination assessment. |
 | **Annotation**| [**DRAM**](https://github.com/WrightonLabCSU/DRAM) | Distilled and Refined Annotation of Metabolism. |
 
+![Workflow Halo Archaea](Pipeline_Halo_Archaea.png)
+
 ## ⚡ 3. Quick Start
 For users who want to run a test on a local machine immediately.
 
