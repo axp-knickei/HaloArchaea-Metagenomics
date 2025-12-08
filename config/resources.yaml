@@ -1,0 +1,32 @@
+# config/resources.yaml
+__default__:
+  slurm_partition: "standard"
+  slurm_account: "microbio_project"
+  runtime: 60
+  mem_mb: 4000
+  cpus_per_task: 1
+
+# Rule-specific overrides
+metaspades:
+  slurm_partition: "bigmem"
+  mem_mb: 500000
+  cpus_per_task: 24
+  runtime: 2880 # 48 hours
+
+semibin2_training:
+  slurm_partition: "gpu"
+  slurm_extra: "--gres=gpu:1"   
+  mem_mb: 32000
+  cpus_per_task: 8
+  runtime: 360
+
+gtdbtk_classify:
+  slurm_partition: "highcpu"
+  mem_mb: 128000
+  cpus_per_task: 24
+  runtime: 600
+
+dram_annotate:
+  slurm_partition: "standard"
+  mem_mb: 100000
+  cpus_per_task: 24

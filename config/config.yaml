@@ -1,0 +1,56 @@
+# config/config.yaml
+
+# -----------------------------------------------------------------------------
+# Project Metadata
+# -----------------------------------------------------------------------------
+project_name: "HaloArchaea_DeepDive"
+samples_file: "config/samples.tsv"
+output_dir: "results"
+
+# -----------------------------------------------------------------------------
+# Database Paths (MUST be pre-downloaded)
+# -----------------------------------------------------------------------------
+databases:
+  # GTDB-Tk R220 Data
+  gtdb: "refs/gtdb_r220/release220"
+  # CheckM2 Diamond Database
+  checkm2: "refs/checkm2_db/CheckM2_database/uniref100.KO.1.dmnd"
+  # DRAM Database (setup via DRAM-setup.py)
+  dram: "refs/DRAM_data"
+
+# -----------------------------------------------------------------------------
+# Tool Parameters
+# -----------------------------------------------------------------------------
+
+# Fastp: Quality Control
+fastp:
+  # Haloarchaea have high GC and repetitive motifs (e.g. gvp genes).
+  # We relax the complexity threshold (default 30) to 20 to avoid over-trimming.
+  complexity_threshold: 20
+  qualified_quality_phred: 15
+  length_required: 50
+  extra: "--detect_adapter_for_pe"
+
+# Assembler Selection
+assembler: "metaspades" # Options: metaspades, megahit
+
+# MetaSPAdes: Assembly
+metaspades:
+  # Multiple k-mers for strain resolution
+  kmer: [21, 33, 55, 77, 99, 127]
+  # Memory limit in GB (passed to tool)
+  mem_gb: 500
+
+# SemiBin2: Binning
+semibin2:
+  # 'global' is a generic model; for specific environments, consider training.
+  environment: "global" 
+
+# GTDB-Tk: Taxonomy
+gtdbtk:
+  min_af: 0.65
+  use_skani: True
+
+# DRAM: Annotation
+dram:
+  min_contig_len: 2500

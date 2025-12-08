@@ -1,0 +1,34 @@
+# workflow/Snakefile
+
+configfile: "config/config.yaml"
+
+import pandas as pd
+
+# Load sample information
+samples_df = pd.read_csv(config["samples_file"], sep="\t").set_index("sample", drop=False)
+SAMPLES = samples_df.index.tolist()
+
+# Include modular rules
+include: "rules/01_qc.smk"
+include: "rules/02_assembly.smk"
+include: "rules/03_binning.smk"
+include: "rules/04_quality.smk"
+include: "rules/05_taxonomy.smk"
+include: "rules/06_annotation.smk"
+include: "rules/07_halo_analysis.smk"
+
+# Target Rule
+rule all:
+    input:
+        # Quality Control
+        expand("results/qc/multiqc/multiqc_report.html"),
+        # Assembly
+        expand("results/assembly/{sample}/contigs.fasta", sample=SAMPLES),
+        # Binning
+        expand("results/binning/final_bins/{sample}/", sample=SAMPLES),
+        # Taxonomy
+        expand("results/taxonomy/gtdbtk/{sample}/classify/gtdbtk.bac120.summary.tsv", sample=SAMPLES),
+        # Annotation
+        expand("results/annotation/dram/{sample}/annotations.tsv", sample=SAMPLES),
+        # Proteomic Analysis (pI)
+        expand("results/halo_analysis/{sample}_proteome_pI.tsv", sample=SAMPLES)

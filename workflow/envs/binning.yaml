@@ -1,0 +1,10 @@
+channels:
+  - bioconda
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - semibin=2.0 # Ensure version matches
+  - bowtie2
+  - samtools
+  # Note: SemiBin2 GPU setup is complex; users often use the container or specific pytorch-cuda builds.
