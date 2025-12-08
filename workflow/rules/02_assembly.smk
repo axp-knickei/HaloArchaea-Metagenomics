@@ -14,7 +14,7 @@ if config["assembler"] == "metaspades":
         threads: 24
         resources:
             mem_mb = config["metaspades"]["mem_gb"] * 1000,
-            runtime = 2880
+            runtime = config["metaspades"]["runtime"]
         conda:
             "../envs/assembly.yaml"
         params:

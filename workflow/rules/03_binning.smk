@@ -5,7 +5,7 @@ rule map_reads:
         r1 = "results/qc/fastp/{sample}_R1.trimmed.fastq.gz",
         r2 = "results/qc/fastp/{sample}_R2.trimmed.fastq.gz"
     output:
-        bam = "results/mapping/{sample}.sorted.bam"
+        bam = temp("results/mapping/{sample}.sorted.bam")
     threads: 16
     conda:
         "../envs/binning.yaml"
@@ -44,10 +44,16 @@ rule semibin2_binning:
             --threads {threads}
         
         mkdir -p {output.bins_dir}
-        # Check if bins were generated before copying
+
+        # Check if the output directory exists and is not empty
         if [ -d "{params.tmp_out}/output_bins" ]; then
-            cp {params.tmp_out}/output_bins/*.fa {output.bins_dir}/
+            # Copy only if files exist, suppressing errors if no match
+            cp {params.tmp_out}/output_bins/*.fa {output.bins_dir}/ 2>/dev/null || true
+            
+            # Optional: Check if we actually copied anything
+            if [ -z "$(ls -A {output.bins_dir})" ]; then
+                 echo "Warning: SemiBin2 finished but produced no bins for {wildcards.sample}" >&2
+            fi
         else
-            echo "Warning: No bins generated for {wildcards.sample}" >&2
+            echo "Warning: SemiBin2 output directory not found for {wildcards.sample}" >&2
         fi
-        """

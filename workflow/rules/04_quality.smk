@@ -3,6 +3,8 @@ rule checkm2_quality:
         bins = "results/binning/final_bins/{sample}"
     output:
         summary = "results/quality/checkm2/{sample}/quality_report.tsv"
+    log:
+        "logs/checkm2/{sample}.log"
     threads: 24
     resources:
         mem_mb = 120000
