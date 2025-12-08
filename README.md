@@ -5,6 +5,8 @@
 ![Python](https://img.shields.io/badge/python-3.10-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+![HaloArchaeLogo](HaloArchaea.png)
+
 ## Table of Contents
 - [1. Overview](#1-overview)
 - [2. Pipeline Architecture](#2-pipeline-architecture)
@@ -18,7 +20,7 @@
 - [10. Troubleshooting](#10-troubleshooting)
 - [11. References](#11-references)
 
-## 📖 1. Overview
+## 1. Overview
 This pipeline is specialized for the **metagenomic analysis of Haloarchaea** (Class *Halobacteria*), which thrive in saturating salt concentrations (>2.5 M NaCl). Hypersaline environments present unique challenges for bioinformatics that standard pipelines often miss.
 
 **Key Features:**
@@ -27,7 +29,7 @@ This pipeline is specialized for the **metagenomic analysis of Haloarchaea** (Cl
 * **Microdiversity Resolution:** Uses **MetaSPAdes** with multiple k-mer sizes to resolve strain heterogeneity common in halophilic communities.
 * **Modern Binning:** Implements **SemiBin2** with GPU acceleration and **CheckM2** for accurate quality assessment of Archaea.
 
-## 🛠️ 2. Pipeline Architecture
+## 2. Pipeline Architecture
 The workflow is built on **Snakemake v8** using the **SLURM Executor Plugin** and a "Container-First" strategy for reproducibility.
 
 | Stage | Tool | Description |
@@ -41,7 +43,7 @@ The workflow is built on **Snakemake v8** using the **SLURM Executor Plugin** an
 
 ![Workflow Halo Archaea](Pipeline_Halo_Archaea.png)
 
-## ⚡ 3. Quick Start
+## 3. Quick Start
 For users who want to run a test on a local machine immediately.
 
 1.  **Clone the repository:**
@@ -61,7 +63,7 @@ For users who want to run a test on a local machine immediately.
     python main.py --mode local --cores 8
     ```
 
-## 💻 4. System Requirements
+## 4. System Requirements
 
 ### Hardware Recommendations
 Metagenomic assembly is computationally intensive.
@@ -121,7 +123,7 @@ This pipeline relies on several large databases. Ensure you have \~200GB of disk
     DRAM-setup.py prepare_databases --output_dir /path/to/databases/DRAM_data
     ```
 
-## ⚙️ 6. Configuration
+## 6. Configuration
 
 ### 1\. Edit `config/samples.tsv`
 
@@ -150,7 +152,7 @@ gtdbtk:
   use_skani: True            # Faster ANI calculation
 ```
 
-## ▶️ 7. Usage
+## 7. Usage
 
 ### Local Execution (Small Test)
 
@@ -170,7 +172,7 @@ python main.py --mode slurm --jobs 50 --config config/config.yaml
 
 **Note:** The pipeline automatically passes `--singularity-args "--nv"` to SemiBin2 jobs to enable GPU acceleration.
 
-## 📂 8. Output Structure
+## 8. Output Structure
 
 After the pipeline finishes, check the `results/` directory:
 
@@ -180,7 +182,7 @@ After the pipeline finishes, check the `results/` directory:
   * **`results/taxonomy/`**: GTDB-Tk classification summaries.
   * **`results/annotation/dram/`**: Metabolic heatmaps (`product.html`) and gene inventories.
 
-## 📊 9. Example Results
+## 9. Example Results
 
 ### Proteome Isoelectric Point Validation
 
@@ -195,7 +197,7 @@ The file `results/halo_analysis/{sample}_proteome_pI.tsv` allows you to plot the
 
 Open `results/annotation/dram/{sample}/product.html` in your browser to view the heatmap of metabolic potential, including sulfur cycling and arsenic resistance genes common in hypersaline brines.
 
-## 🔧 10. Troubleshooting
+## 10. Troubleshooting
 
 ### Out of Memory (OOM) Errors
 
@@ -222,7 +224,7 @@ Open `results/annotation/dram/{sample}/product.html` in your browser to view the
   * Check `results/binning/semibin_output/` to see if SemiBin2 produced output.
   * Low biomass samples or poor assembly quality can result in zero high-quality bins. Check `results/qc/multiqc` to verify read quality.
 
-## 📚 11. References
+## 11. References
 
 1.  **Snakemake:** Mölder, F., et al. (2021). Sustainable data analysis with Snakemake. *F1000Research*, 10, 33.
 2.  **fastp:** Chen, S., et al. (2018). fastp: an ultra-fast all-in-one FASTQ preprocessor. *Bioinformatics*, 34(17), i884–i890.
