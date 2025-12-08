@@ -30,3 +30,10 @@ dram_annotate:
   slurm_partition: "standard"
   mem_mb: 100000
   cpus_per_task: 24
+
+# Rule-specific overrides
+checkm2_quality: # <-- ADD THIS BLOCK
+  slurm_partition: "bigmem" # Or 'highcpu', depending on your cluster setup
+  mem_mb: 120000            # Matches the rule's local resource request (120GB)
+  cpus_per_task: 24         # Matches the rule's threads
+  runtime: 360 # 6 hours (adjust as needed)

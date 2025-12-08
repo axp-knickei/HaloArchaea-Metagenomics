@@ -32,15 +32,17 @@ if config["assembler"] == "metaspades":
                 > {log} 2>&1
             
             # Ensure output matches expectation
-            if [ -f {params.outdir}/contigs.fasta ]; then
-                touch {output.contigs}
+            if [ -f {params.outdir}/scaffolds.fasta ];
+            then
+                mv {params.outdir}/scaffolds.fasta {output.contigs}
             else
-                echo "Error: Contigs not found" >&2
+                echo "Error: Scaffolds not found" >&2
                 exit 1
             fi
             
             # Graph might not exist if assembly failed early but contigs exist (unlikely but possible)
-            if [ -f {params.outdir}/assembly_graph.fastg ]; then
+            if [ -f {params.outdir}/assembly_graph.fastg ]; 
+            then
                 touch {output.graph}
             fi
             """

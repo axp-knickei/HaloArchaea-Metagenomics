@@ -11,6 +11,8 @@ rule calculate_proteome_pi:
         "results/halo_analysis/{sample}_genes.faa"
     output:
         "results/halo_analysis/{sample}_proteome_pI.tsv"
+    log: # <-- ADD THIS BLOCK
+        "logs/proteome_pi/{sample}.log" 
     conda:
         "../envs/biopython.yaml"
     script:
