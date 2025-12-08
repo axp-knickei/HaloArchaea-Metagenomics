@@ -5,7 +5,7 @@
 ![Python](https://img.shields.io/badge/python-3.10-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-## 📖 1. Overview
+## 1. Overview
 This pipeline is specialized for the **metagenomic analysis of Haloarchaea** (Class *Halobacteria*), which thrive in saturating salt concentrations (>2.5 M NaCl). Hypersaline environments present unique challenges for bioinformatics that standard pipelines often miss.
 
 **Key Features:**
@@ -14,8 +14,11 @@ This pipeline is specialized for the **metagenomic analysis of Haloarchaea** (Cl
 * **Microdiversity Resolution:** Uses **MetaSPAdes** with multiple k-mer sizes to resolve strain heterogeneity common in halophilic communities.
 * **Modern Binning:** Implements **SemiBin2** with GPU acceleration and **CheckM2** for accurate quality assessment of Archaea.
 
-## 🛠️ 2. Pipeline Architecture
+## 2. Pipeline Architecture
+
 The workflow is built on **Snakemake v8** using the **SLURM Executor Plugin** and a "Container-First" strategy for reproducibility.
+
+![Pipeline_HaloArchaea](Pipeline_Halo_Archaea.png)
 
 | Stage | Tool | Description |
 | :--- | :--- | :--- |
@@ -117,7 +120,7 @@ gtdbtk:
   use_skani: True            # Faster ANI calculation
 ```
 
-## ▶️ 6. Usage
+## 6. Usage
 
 ### Local Execution (Small Test)
 
@@ -137,7 +140,7 @@ python main.py --mode slurm --jobs 50 --config config/config.yaml
 
 **Note:** The pipeline automatically passes `--singularity-args "--nv"` to SemiBin2 jobs to enable GPU acceleration.
 
-## 📂 7. Output Structure
+## 7. Output Structure
 
 After the pipeline finishes, check the `results/` directory:
 
@@ -148,7 +151,7 @@ After the pipeline finishes, check the `results/` directory:
   * **`results/taxonomy/`**: GTDB-Tk classification summaries.
   * **`results/annotation/dram/`**: Metabolic heatmaps (`product.html`) and gene inventories.
 
-## 📚 8. References
+## 8. References
 
 If you use this pipeline, please cite this repository and the following tools:
 
