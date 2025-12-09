@@ -4,12 +4,13 @@
 ![Snakemake](https://img.shields.io/badge/snakemake-≥8.4.6-brightgreen.svg)
 ![Python](https://img.shields.io/badge/python-3.10-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![Zenodo](https://doi.org/10.5281/zenodo.17863847)
 
 ![HaloArchaeLogo](HaloArchaea.png)
 
 ## Table of Contents
 - [1. Overview](#1-overview)
-- [2. Pipeline Architecture](#2-pipeline-architecture)
+- [2. Pipeline Architecture](#2-pipeline-architecture)  
 - [3. Quick Start](#3-quick-start)
 - [4. System Requirements](#4-system-requirements)
 - [5. Installation & Setup](#5-installation--setup)
@@ -233,3 +234,18 @@ Open `results/annotation/dram/{sample}/product.html` in your browser to view the
 5.  **GTDB-Tk:** Chaumeil, P. A., et al. (2022). GTDB-Tk v2: memory friendly classification with the Genome Taxonomy Database. *Bioinformatics*, 38(23), 5315–5316.
 6.  **CheckM2:** Chklovski, A., et al. (2023). CheckM2: a rapid, scalable and accurate tool for assessing microbial genome quality using machine learning. *Nature Methods*, 20, 1203–1212.
 7.  **DRAM:** Shaffer, M., et al. (2020). DRAM for distilling microbial metabolism to automate the curation of microbiome function. *Nucleic Acids Research*, 48(16), 8883–8900.
+
+## 12. Citation
+
+If you use this pipeline in your research, please cite:
+
+```bibtex
+@software{HaloArcaea-Metagenomics,
+  author = {Alex Prima},
+  title = {HaloArchaea-Metagenomics Pipeline, a high-throughput Snakemake v8 workflow designed for hypersaline ecosystems},
+  year = {2025},
+  url = {https://github.com/axp-knickei/HaloArchaea-Metagenomics},
+  doi = {10.5281/zenodo.17863847}
+}
+```
+Also cite the individual tools (see References section above).
