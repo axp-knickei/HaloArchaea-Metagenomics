@@ -4,7 +4,8 @@
 ![Snakemake](https://img.shields.io/badge/snakemake-≥8.4.6-brightgreen.svg)
 ![Python](https://img.shields.io/badge/python-3.10-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Zenodo](https://doi.org/10.5281/zenodo.17863847)
+![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.17863847.svg)
+
 
 ![HaloArchaeLogo](HaloArchaea.png)
 
